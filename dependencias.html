@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1px;
+}
+
+#html {
+  fill: green;
+}
+
+.link.href {
+  stroke: rgb(47, 18, 80);
+}
+
+.link.include {
+  stroke: blueviolet;
+}
+
+.link.require {
+  stroke:blue;
+}
+
+.link.default {
+  stroke-dasharray: 0,2 1;
+}
+
+circle {
+  fill: #ccc;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+text {
+  font: 12px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+</style>
+<body>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <!--<script type="text/javascript" src="referencias.js"></script> -->
+  <!--<script src="d3.v3.min.js"></script> -->
+  
+  <script>
+
+    var titulo = localStorage.getItem('titulo');
+
+
+    document.write("<h6 align='center'>" + "Nodo: " + titulo + "</h6>");
+
+    // http://blog.thomsonreuters.com/index.php/mobile-patent-suits-graphic-of-the-day/
+   
+    var grupos_g = localStorage.getItem('grupos');
+    var grupos = JSON.parse(grupos_g);
+
+    var guardado = localStorage.getItem('str_links');
+    var links = JSON.parse(guardado);
+
+    var nodes = {};
+
+    // Compute the distinct nodes from the links.
+    links.forEach(function(link) {
+      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+      link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+    });
+
+    
+/*  var proporc_marco = 1;
+
+    if(link.length<30) {
+      proporc_marco= 30/link.length;
+    } */
+
+
+    var width = 960,
+        height = 500;
+    
+
+    var force = d3.layout.force()
+        .nodes(d3.values(nodes))
+        .links(links)
+        .size([width, height])
+        .linkDistance(60)
+        .charge(-300)
+        .on("tick", tick)
+        .start();
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+        
+    // Per-type markers, as they don't inherit styles.
+    svg.append("defs").selectAll("marker")
+        .data(["href", "include", "require"])
+        .enter().append("marker")
+        .attr("id", function(d) { return d; })
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 15)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-5L10,0L0,5");
+
+    var path = svg.append("g").selectAll("path")
+        .data(force.links())
+        .enter().append("path")
+        .attr("class", function(d) { return "link " + d.nexo; })
+        .attr("marker-end", function(d) { return "url(#" + d.nexo + ")"; });
+
+    var circle = svg.append("g").selectAll("circle")
+        .data(force.nodes())
+        .enter().append("circle")
+        .attr("r", 6)
+        .style("fill", function(d) {
+          col_cir = -1; 
+          for(var i=0; i<grupos.length; i++) {
+            if(grupos[i][0] == d.name){
+              col_cir = grupos[i][1];
+            }; };
+
+          if(col_cir == 0){
+              return "rgb(3, 108, 22)";
+          } else if(col_cir == 1) { 
+              return "rgb(15, 196, 48)";
+          } else if(col_cir == 2) { 
+              return "rgb(116, 231, 137)";
+          } else {
+              return "steelblue";
+          }
+
+          ; })
+ 
+        .call(force.drag);
+
+    var text = svg.append("g").selectAll("text")
+        .data(force.nodes())
+        .enter().append("text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .text(function(d) { return d.name; });
+
+    // Use elliptical arc path segments to doubly-encode directionality.
+    function tick() {
+      path.attr("d", linkArc);
+      circle.attr("transform", transform);
+      text.attr("transform", transform);
+    }
+
+    function linkArc(d) {
+      var dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          dr = Math.sqrt(dx * dx + dy * dy);
+      return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+    }
+
+    function transform(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    }
+
+  </script>
+
+</body>
