@@ -31,9 +31,8 @@
 
         #cajaDIV {
           padding: 10px 0;
-          border-style: double;
           text-align: center;
-          background-color: lightblue;
+          background-color: rgba(62, 157, 170, 0.905);
           display: none;
         }
         
@@ -66,7 +65,7 @@
 
         <div id='update'>
         
-            <div id = cajaDIV style="width:700px ; height:500px ;display:none; position:absolute;"> </div>
+            <div id = "cajaDIV" style="max-width:30%; max-height:30%; display:none; position:absolute;"> </div>
 
             <script>
 
@@ -232,8 +231,8 @@
                         var x = document.getElementById("cajaDIV");
                         x.innerHTML = "";
                         x.style.position = "absolute";
-                        x.style.top = d.x + 110 + "px";
-                        x.style.left = d.y + d.progms.length + "px";
+                        x.style.top = d.x -10+  "px";
+                        x.style.left = d.y +  "px";
 
                         var titulo_pag = d.name +': '+ d.progms.length + ' usuarios';
 
