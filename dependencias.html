@@ -60,6 +60,7 @@ text {
 
     var guardado = localStorage.getItem('str_links');
     var links = JSON.parse(guardado);
+    links.splice(0, 1);
 
     var nodes = {};
 

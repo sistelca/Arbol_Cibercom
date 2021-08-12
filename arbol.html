@@ -130,12 +130,12 @@
                         .attr("r", 1e-6)
                         .style("fill", function(d) {
                             if(d.progms.length > 0){
-                                return "lightsteelblue"
+                                return "rgb(0,255,0)"
                             } else { 
                                 return "rgb(163, 145, 145)" }; })
 
                              //return d.progms > 0 ? "lightsteelblue" : "#fff"; })
-                        .style("stroke", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+                        .style("stroke", function(d) { return (d.progms.length > 1) ? "rgb(0,128,0)" : "rgb(255,0,0)"; });
                         
 
                     nodeEnter.append("text")
@@ -155,12 +155,12 @@
                         .attr("r", 10)
                         .style("fill", function(d) {
                             if(d.progms.length > 0){
-                                return "lightsteelblue";
+                                return "rgb(0,255,0)";
                             } else { 
                                 return "rgb(163, 145, 145)" }; })
 
                              //return d.progms > 0 ? "lightsteelblue" : "#fff"; })
-                        .style("stroke", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+                        .style("stroke", function(d) { return (d.progms.length > 1) ? "rgb(0,128,0)" : "rgb(163, 145, 145)"; });
                         
 
                     nodeUpdate.select("text")
@@ -227,7 +227,7 @@
                 
                 function muestracaja(d) {
                     
-                    if (d.progms.length >0 && inCaja) {
+                    if (d.progms.length >1 && inCaja) {
                         inCaja = false;
                         var x = document.getElementById("cajaDIV");
                         x.innerHTML = "";
@@ -235,7 +235,7 @@
                         x.style.top = d.x + 110 + "px";
                         x.style.left = d.y + d.progms.length + "px";
 
-                        var titulo_pag = d.name +': '+ d.progms.length + ' *.php';
+                        var titulo_pag = d.name +': '+ d.progms.length + ' usuarios';
 
                         if (d.frutas.length > 0) {
                             x.style.height = 500 + 'px';
@@ -250,7 +250,7 @@
                         } else {
                             x.style.height = null;
                             x.style.width = null;
-                            x.insertAdjacentHTML("beforeend", "php's: " + d.progms.length);
+                            x.insertAdjacentHTML("beforeend", "cnx's: " + d.progms.length-1);
                         }
 
                         x.style.display = "block"; 
