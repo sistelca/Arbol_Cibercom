@@ -339,5 +339,5 @@ treeData = treeData.replace("{'source':", "{source:")
 treeData = treeData.replace(" 'target':", " target:")
 treeData = treeData.replace(" 'nexo':", " nexo:")
 
-with open('arbol.js', 'w') as js_file:
+with open('/var/www/html/scan_red/arbol.js', 'w') as js_file:
     js_file.write(treeData)
